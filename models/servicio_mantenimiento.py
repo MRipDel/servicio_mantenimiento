@@ -5,7 +5,7 @@ class ServicioMantenimiento(models.Model):
     _name = 'servicio.mantenimiento'
     _description = 'Gestión de Servicio de Mantenimiento'
     _rec_name = 'garantia_id'
-    garantia_id = fields.Many2one('garantias', string='Garantía', required=True)
+    garantia_id = fields.Many2one('garantia.producto', string='Garantía', required=True)
     customer_id = fields.Many2one('res.partner', string='Cliente',
     related='garantia_id.customer_id', store=True)
     product_id = fields.Many2one('product.product', string='Producto',
@@ -31,7 +31,7 @@ class ServicioMantenimiento(models.Model):
 
     @api.model
     def create(self, vals):
-        garantia = self.env['garantias'].browse(vals.get('garantia_id'))
+        garantia = self.env['garantia.producto'].browse(vals.get('garantia_id'))
         if garantia.status != 'valid':
             raise UserError('No se puede crear un mantenimiento para una garantía expirada.')
         return super(ServicioMantenimiento, self).create(vals)
